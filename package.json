@@ -18,6 +18,9 @@
   "homepage": "https://github.com/vincepmartin/memecycle-backend#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "easy-fit": "0.0.8",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.4",
+    "morgan": "^1.10.0"
   }
 }
