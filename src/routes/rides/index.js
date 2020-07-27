@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const FitParser = require('fit-file-parser').default
+const Ride = require('../../models/ride')
 
 // Convert the fit file to some usable JSON.
 // Upload to DB.
-const processFile = ((file, callback) => {
+const processFitFile = ((file, callback) => {
     const fitParser = new FitParser({
         force: true,
         speeddUnit: 'mph',
@@ -16,20 +17,21 @@ const processFile = ((file, callback) => {
         if(error) {
             throw(`Problem processing fit file ${file}`)
         }
-
-        // TODO: Upload to DB.
-
         callback(data)
     })
 })
 
-// TODO: Return all ride ids.
-router.get('/', (request, response) => {
-    response.send({
-        title: 'Ride 1',
-        description: 'This is ride number 1.',
-        data: {miles: 10, feet: 200}
-    })
+// Return a ride based on its document ID in the DB.
+router.get('/:id', (request, response) => {
+    // Attempt to get this id from the database.
+    console.log(`Attempting to get ride id: ${request.params.id}`)
+    Ride.findById(request.params.id, (error, ride) => {
+        if(error) {
+            response.send(error)
+        } else {
+            response.send(ride)
+        }
+    }) 
 })
 
 // TODO: Upload ride to DB.
@@ -40,12 +42,26 @@ router.get('/', (request, response) => {
 //  Images: Jpeg. 
 
 router.post('/', (request, response) => {
-    console.log('File upload request.') 
-    
     if (!request.files || Object.keys(request.files).length === 0) {
         return response.status(400).send('No files were uploaded.');
     } else {
-        processFile(request.files.rideFile.data, (data) => {response.send(data)})
+        processFitFile(request.files.rideFile.data, (data) => {
+            const ride = new Ride({
+                title: 'Test ride.',
+                description: 'This is a test ride.',
+                rideData: JSON.stringify(data)
+            })
+
+            ride.save((error, ride) => {
+                if(error) {
+                    console.error(error)
+                    response.status(400).send(error)
+                    return(error)
+                }
+
+                response.send(ride._id)})
+                console.log(ride)
+            })
     }
 })
 
