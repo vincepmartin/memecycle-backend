@@ -31,7 +31,7 @@ router.get('/:id', (request, response) => {
         } else {
             response.send(ride)
         }
-    }) 
+    })
 })
 
 // TODO: Upload ride to DB.
