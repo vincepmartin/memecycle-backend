@@ -5,7 +5,7 @@ const ride = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    rideData: { type: String},
+    rideData: { type: Schema.Types.Mixed},
     // TODO: Maybe make this an array.
     image1: { type: Buffer },
     image2: { type: Buffer },

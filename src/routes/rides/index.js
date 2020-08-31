@@ -49,7 +49,11 @@ router.post('/', (request, response) => {
             const ride = new Ride({
                 title: 'Test ride.',
                 description: 'This is a test ride.',
-                rideData: JSON.stringify(data)
+                rideData: JSON.stringify(data),
+                image1: request.files.image1,
+                image2: request.files.image2,
+                image3: request.files.image3,
+                image4: request.files.image4,
             })
 
             ride.save((error, ride) => {

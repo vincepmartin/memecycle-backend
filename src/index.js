@@ -14,8 +14,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 db.once('open', console.error.bind(console, 'Mongoose: Connected to DB.'))
 
-
-
 // Configure routes.
 const routes = require('./routes/index.js')
 
