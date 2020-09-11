@@ -4,9 +4,8 @@ const FitParser = require('fit-file-parser').default
 const Ride = require('../../models/ride')
 
 const processFitPromise = (file) => {
-    console.log('***** processFitPromise running with file: ')
-    console.log(file)
-
+    // console.log(`***** processFitPromise running with file: ${file.name}`)
+    
     return new Promise((resolve, reject) => {
         const fitParser = new FitParser({
             force: true,
@@ -22,7 +21,7 @@ const processFitPromise = (file) => {
                 console.log(error)
                 reject(new Error('Problem processing fit file.'))
             } else {
-                console.log('***** processFitPromise resolve trigger.')
+                console.log(`***** Success processing ${file.name}`)
                 resolve(data)
             }
         })
@@ -50,19 +49,15 @@ router.get('/:id', (request, response) => {
 //  Images: Jpeg. 
 
 router.post('/', (request, response) => {
-    // Store ride data.
-    console.log('***** REQ *****')
-    console.log(request)
-    console.log('***** FILES *****')
-    console.log(request.files)
+    // Store ride data in a mongoose obj.
     const ride = new Ride({
-        title: (request.title) ? request.title : 'Default Title.',
-        description: (request.description) ? request.description : 'This is a test ride.',
+        title: (request.body.title) ? request.body.title : 'Default Title.',
+        description: (request.body.description) ? request.body.description : 'This is a test ride.',
         rideData: null,
-        image1: request.files.image1,
-        image2: request.files.image2,
-        image3: request.files.image3,
-        image4: request.files.image4,
+        image1: (request.files.image1) ? {name: request.files.image1.name, data: request.files.image1.data}: null,
+        image2: (request.files.image2) ? {name: request.files.image2.name, data: request.files.image2.data}: null,
+        image3: (request.files.image3) ? {name: request.files.image3.name, data: request.files.image3.data}: null,
+        image4: (request.files.image4) ? {name: request.files.image4.name, data: request.files.image4.data}: null,
     })
 
     if (!request.files || Object.keys(request.files).length === 0) {
@@ -73,10 +68,10 @@ router.post('/', (request, response) => {
             processFitPromise(request.files.rideFile).then(rideData => {
                 ride.rideData = JSON.stringify(rideData)
             }).then(() => (ride.save())).then(doc => {
+                // TODO: Print out the ride obj.
                 response.send(doc._id)
             })
             .catch(error => {
-                console.log(error)
                 response.status(400).send(error)
             })
         } else { // No rideFile was included.  Just save the non rideData stuff.

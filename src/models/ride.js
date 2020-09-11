@@ -7,10 +7,23 @@ const ride = new Schema({
     createdAt: { type: Date, default: Date.now },
     rideData: { type: Schema.Types.Mixed},
     // TODO: Maybe make this an array.
-    image1: { type: Buffer },
-    image2: { type: Buffer },
-    image3: { type: Buffer },
-    image4: { type: Buffer },
+    // I know this is a bit hacky...
+    image1: {
+        name: {type: String},
+        data: {type: Buffer},
+    },
+    image2: {
+        name: {type: String},
+        data: {type: Buffer},
+    },
+    image3: {
+        name: {type: String},
+        data: {type: Buffer},
+    },
+    image4: {
+        name: {type: String},
+        data: {type: Buffer},
+    },
 })
 
 module.exports = mongoose.model('ride', ride)

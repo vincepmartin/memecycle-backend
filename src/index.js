@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const fileUpload = require('express-fileupload')
 const app = express()
+const bodyParser = require('body-parser')
 const cors = require('cors')
 
 /* Configure MongoDB. */
@@ -22,6 +23,9 @@ app.use(morgan('short'))
 
 // Allow easy uploading of files.
 app.use(fileUpload({createParentPath: true, debug: true}))
+
+// Body decoding.
+app.use(bodyParser.urlencoded({extended: true}))
 
 // Configure CORS.
 app.use(cors({origin: 'http://localhost:3000'}))
