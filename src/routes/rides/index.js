@@ -5,11 +5,11 @@ const Ride = require('../../models/ride')
 
 const processFitPromise = (file) => {
     // console.log(`***** processFitPromise running with file: ${file.name}`)
-    
+
     return new Promise((resolve, reject) => {
         const fitParser = new FitParser({
             force: true,
-            speeddUnit: 'mph',
+            speedUnit: 'mph',
             lengthUnit: 'mi',
             temperatureUnit: 'farhenheit',
         })
