@@ -4,6 +4,7 @@ const fileUpload = require('express-fileupload')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const rateLimit = require('express-rate-limit')
 
 /* Configure MongoDB. */
 //Get the default connection
@@ -21,6 +22,13 @@ const routes = require('./routes/index.js')
 // Logging to console.
 app.use(morgan('short'))
 
+// Rate limiting
+const mins = 60
+app.use(rateLimit({
+    window: mins * 60 * 1000,
+    max: 15,
+}))
+
 // Allow easy uploading of files.
 app.use(fileUpload({createParentPath: true, debug: true}))
 
@@ -28,7 +36,8 @@ app.use(fileUpload({createParentPath: true, debug: true}))
 app.use(bodyParser.urlencoded({extended: true}))
 
 // Configure CORS.
-app.use(cors({origin: 'http://localhost:3000'}))
+const corsOptions = {origin: 'https://memecycle.finalatomicbuster.net'}
+app.use(cors(corsOptions))
 
 // Routes.
 app.use(routes)

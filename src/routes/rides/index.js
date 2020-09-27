@@ -34,8 +34,11 @@ router.get('/:id', (request, response) => {
     console.log(`Attempting to get ride id: ${request.params.id}`)
     Ride.findById(request.params.id, (error, ride) => {
         if(error) {
+            console.log('ERROR HIT!')
+            console.log(error)
             response.send(error)
         } else {
+            console.log('SENDING A RESPONSE!')
             response.send(ride)
         }
     })
