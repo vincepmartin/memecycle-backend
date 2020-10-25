@@ -5,6 +5,7 @@ const ride = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
+    rideType: {type: String, required: true},
     rideData: { type: Schema.Types.Mixed},
     // TODO: Maybe make this an array.
     // I know this is a bit hacky...
