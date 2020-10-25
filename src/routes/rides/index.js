@@ -111,7 +111,6 @@ router.post('/', (request, response) => {
                 return ride.save()
             })
             .then(doc => {
-                console.log(doc)
                 response.send(doc._id)
             })
             .catch((error) => {
