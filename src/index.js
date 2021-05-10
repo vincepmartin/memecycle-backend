@@ -9,7 +9,8 @@ const rateLimit = require('express-rate-limit')
 /* Configure MongoDB. */
 //Get the default connection
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/memebike', {useNewUrlParser: true});
+// mongoose.connect('mongodb://localhost/memebike', {useNewUrlParser: true});
+mongoose.connect('mongodb://mongo/memebike', {useNewUrlParser: true});
 const db = mongoose.connection;
 
 // Bind connection to error event (to get notification of connection errors)
