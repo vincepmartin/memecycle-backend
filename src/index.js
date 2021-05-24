@@ -5,17 +5,17 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
-const CORS = process.env['CORS'];
+const CORS = process.env['CORS']
+const LISTEN_PORT = process.env['LISTEN_PORT']
 
 /* Configure MongoDB. */
 //Get the default connection
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost/memebike', {useNewUrlParser: true});
 mongoose.connect('mongodb://mongo/memebike', {useNewUrlParser: true});
 const db = mongoose.connection;
 
 // Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+db.on('error', console.error.bind(console, 'MongoDB connection error.'))
 db.once('open', console.error.bind(console, 'Mongoose: Connected to DB.'))
 
 // Configure routes.
@@ -50,9 +50,10 @@ app.use( (request, response, next) => {
 })
 
 // Start server.
-app.listen(8080, () => {
+app.listen(LISTEN_PORT, () => {
     console.log('Starting memecycle-backend')
     console.log('--------------------------')
-    console.log(`PORT: 8080`)
+    console.log(`PORT: ${LISTEN_PORT}`)
     console.log(`CORS_ORIGIN: ${CORS}`)
+    console.log('--------------------------')
 })

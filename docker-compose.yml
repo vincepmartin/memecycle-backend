@@ -10,6 +10,8 @@ services:
       - mongo
     environment:
       CORS: 'https://memecycle.finalatomicbuster.net'
+      LISTEN_PORT: 8080
+
   mongo:
     container_name: mongo
     image: mongo
