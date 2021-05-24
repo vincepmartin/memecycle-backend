@@ -10,8 +10,7 @@ const Ride = require('../../models/ride')
 
 
 const processRideFile = (file) => {
-    console.log('PROCESSING FILE')
-    console.log(file.name)
+    console.log(`Processing Ride File: ${file.name}`)
 
     if(file.name.endsWith('gpx')) {
         return processGPXPromise(file)
@@ -22,7 +21,7 @@ const processRideFile = (file) => {
 
 const processGPXPromise = (file) => {
     return new Promise((resolve, reject) => {
-        console.log(`Processing GPX file: ${file.name}`)  
+        console.log(`\tGPX: ${file.name}`)  
         // Load my GPX file into the dom?
         const gpxDom = new DOMParser().parseFromString(file.data.toString())
         const results = toGeoJSON.gpx(gpxDom)
@@ -30,7 +29,7 @@ const processGPXPromise = (file) => {
         if(results) {
             resolve({type: 'gpx', data: results})
         } else {
-            console.log('Problem parsing GPX file.')
+            console.log('\tError processing GPX')
             reject('Error processing GPX')
         }
     })
@@ -38,7 +37,7 @@ const processGPXPromise = (file) => {
 
 const processFitPromise = (file) => {
     return new Promise((resolve, reject) => {
-        console.log(`Processing FIT file: ${file.name}`)  
+        console.log(`\tFIT: ${file.name}`)  
         const fitParser = new FitParser({
             force: true,
             speedUnit: 'mph',
@@ -49,9 +48,9 @@ const processFitPromise = (file) => {
         // TODO: Changed file to file.data
         fitParser.parse(file.data, (error, data) => {
             if(error) {
-                console.log('Error processing FIT file.') 
+                console.log('\tError processing FIT') 
                 console.log(error)
-                reject(new Error('Problem processing fit file.'))
+                reject(new Error('Error processing FIT'))
             } else {
                 resolve({type: 'fit', data: data})
             }
@@ -62,14 +61,12 @@ const processFitPromise = (file) => {
 // Return a ride based on its document ID in the DB.
 router.get('/:id', (request, response) => {
     // Attempt to get this id from the database.
-    console.log(`Attempting to get ride id: ${request.params.id}`)
+    console.log(`Looking for ride ID: ${request.params.id}`)
     Ride.findById(request.params.id, (error, ride) => {
         if(error) {
-            console.log('ERROR HIT!')
             console.log(error)
             response.send(error)
         } else {
-            console.log('SENDING A RESPONSE!')
             response.send(ride)
         }
     })
@@ -86,7 +83,7 @@ router.post('/', (request, response) => {
     // Store ride data in a mongoose obj.
     const ride = new Ride({
         title: (request.body.title) ? request.body.title : 'Default Title.',
-        description: (request.body.description) ? request.body.description : 'This is a test ride.',
+        description: (request.body.description) ? request.body.description : 'Default description.',
         rideType: null,
         rideData: null,
         image1: (request.files.image1) ? {name: request.files.image1.name, data: request.files.image1.data}: null,
@@ -114,7 +111,7 @@ router.post('/', (request, response) => {
                 response.send(doc._id)
             })
             .catch((error) => {
-                console.log('Error hit while processing ride file')
+                console.log('Error uploading ride file.')
                 console.log(error)
                 response.status(400).send(error)
             })
@@ -122,7 +119,7 @@ router.post('/', (request, response) => {
     // We have no file, this is our last resort.  Save without the file.
     else {
         ride.save().then(doc => response.send(doc)).catch(error => {
-            console.log('Error hit while processing without a ride file')
+            console.log('Error uploading without a ride file.')
             console.log(error)
             response.status(400).send(error)
         })
