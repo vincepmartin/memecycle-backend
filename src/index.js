@@ -51,5 +51,8 @@ app.use( (request, response, next) => {
 
 // Start server.
 app.listen(8080, () => {
-    console.log('Listening...')
+    console.log('Starting memecycle-backend')
+    console.log('--------------------------')
+    console.log(`PORT: 8080`)
+    console.log(`CORS_ORIGIN: ${CORS}`)
 })
