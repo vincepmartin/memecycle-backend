@@ -5,6 +5,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
+const CORS = process.env['CORS'];
 
 /* Configure MongoDB. */
 //Get the default connection
@@ -37,7 +38,7 @@ app.use(fileUpload({createParentPath: true, debug: true}))
 app.use(bodyParser.urlencoded({extended: true}))
 
 // Configure CORS.
-const corsOptions = {origin: 'https://memecycle.finalatomicbuster.net'}
+const corsOptions = {origin: CORS}
 app.use(cors(corsOptions))
 
 // Routes.

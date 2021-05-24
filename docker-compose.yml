@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     links:
       - mongo
+    environment:
+      CORS: 'https://memecycle.finalatomicbuster.net'
   mongo:
     container_name: mongo
     image: mongo
